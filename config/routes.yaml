@@ -3,3 +3,10 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+
+api_login:
+    path: /login
+    methods: [ POST ]
+    defaults: { _controller: 'App\Security\UserAuthenticator::onAuthenticationSuccess' }
+    format: json
+    stateless: true
