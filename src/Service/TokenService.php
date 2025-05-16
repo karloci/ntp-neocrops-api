@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\RefreshToken;
 use App\Entity\User;
 use App\Repository\RefreshTokenRepository;
 use App\Serializer\DataSerializer;

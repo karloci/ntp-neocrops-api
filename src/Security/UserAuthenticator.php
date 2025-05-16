@@ -50,7 +50,7 @@ class UserAuthenticator extends AbstractAuthenticator
         if (is_null($user) || !$this->passwordHasher->isPasswordValid($user, $password)) {
             throw new AuthenticationException("Invalid credentials");
         }
-        return new SelfValidatingPassport(new UserBadge($user->getId()));
+        return new SelfValidatingPassport(new UserBadge($user->getEmail()));
     }
 
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
