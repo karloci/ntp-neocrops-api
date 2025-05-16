@@ -3,16 +3,15 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\PasswordUpgraderInterface;
 
-/**
- * @extends ServiceEntityRepository<User>
- */
-class UserRepository extends ServiceEntityRepository implements PasswordUpgraderInterface
+
+class UserRepository extends AbstractRepository implements PasswordUpgraderInterface, UserLoaderInterface
 {
     public function __construct(ManagerRegistry $registry)
     {
@@ -33,28 +32,43 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
-    //    /**
-    //     * @return User[] Returns an array of User objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('u.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+    public function loadUserByIdentifier(string $identifier): ?User
+    {
+        return $this->createQueryBuilder("user")
+            ->addSelect("farm")
+            ->leftJoin("user.farm", "farm")
+            ->andWhere("user.email = :identifier")
+            ->setParameter("identifier", $identifier)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 
-    //    public function findOneBySomeField($value): ?User
-    //    {
-    //        return $this->createQueryBuilder('u')
-    //            ->andWhere('u.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+    public function loadUserByIdentifierAndRefreshToken(string $identifier, mixed $refreshToken): ?User
+    {
+        return $this->createQueryBuilder("user")
+            ->addSelect("farm")
+            ->addSelect("refreshToken")
+            ->leftJoin("user.farm", "farm")
+            ->leftJoin("user.refreshTokens", "refreshToken")
+            ->andWhere("user.email = :identifier")
+            ->setParameter("identifier", $identifier)
+            ->andWhere("refreshToken.token = :refreshToken")
+            ->setParameter("refreshToken", $refreshToken)
+            ->andWhere("refreshToken.expiresAt >= :expiresAt")
+            ->setParameter("expiresAt", new DateTime())
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function findOneUserByEmail(string $email): ?User
+    {
+        return $this->createQueryBuilder("user")
+            ->andWhere("user.email = :email")
+            ->setParameter("email", $email)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }

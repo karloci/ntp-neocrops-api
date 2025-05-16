@@ -20,5 +20,12 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Service\TokenService:
+        arguments:
+            $tokenSecret: '%env(TOKEN_SECRET)%'
+            $security: '@Symfony\Bundle\SecurityBundle\Security'
+            $refreshTokenRepository: '@App\Repository\RefreshTokenRepository'
+            $dataSerializer: '@App\Serializer\DataSerializer'
+
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

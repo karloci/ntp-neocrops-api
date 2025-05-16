@@ -2,11 +2,15 @@
 
 namespace App\Entity;
 
+use App\Entity\RefreshToken;
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -16,22 +20,42 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(["user:default"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(["user:default"])]
     private ?string $fullName = null;
 
     #[ORM\Column(length: 180)]
+    #[Groups(["user:default"])]
     private ?string $email = null;
 
     #[ORM\Column]
+    #[Groups(["user:default"])]
     private array $roles = [];
 
     #[ORM\Column]
     private ?string $password = null;
 
     #[ORM\Column(type: Types::BLOB, nullable: true)]
+    #[Groups(["user:avatar"])]
     private $avatar = null;
+
+    /**
+     * @var Collection<int, RefreshToken>
+     */
+    #[ORM\OneToMany(targetEntity: RefreshToken::class, mappedBy: "user", orphanRemoval: true)]
+    #[Groups(["user:refreshTokens"])]
+    private Collection $refreshTokens;
+
+    #[ORM\ManyToOne]
+    private ?Farm $farm = null;
+
+    public function __construct()
+    {
+        $this->refreshTokens = new ArrayCollection();
+    }
 
     public function getUserIdentifier(): string
     {
@@ -109,6 +133,48 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAvatar($avatar): static
     {
         $this->avatar = $avatar;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, RefreshToken>
+     */
+    public function getRefreshTokens(): Collection
+    {
+        return $this->refreshTokens;
+    }
+
+    public function addRefreshToken(RefreshToken $refreshToken): static
+    {
+        if (!$this->refreshTokens->contains($refreshToken)) {
+            $this->refreshTokens->add($refreshToken);
+            $refreshToken->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeRefreshToken(RefreshToken $refreshToken): static
+    {
+        if ($this->refreshTokens->removeElement($refreshToken)) {
+            // set the owning side to null (unless already changed)
+            if ($refreshToken->getUser() === $this) {
+                $refreshToken->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getFarm(): ?Farm
+    {
+        return $this->farm;
+    }
+
+    public function setFarm(?Farm $farm): static
+    {
+        $this->farm = $farm;
 
         return $this;
     }
