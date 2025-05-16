@@ -1,0 +1,33 @@
+name: 'ntp-neocrops-api'
+services:
+    app:
+        build:
+            context: .
+            dockerfile: Dockerfile
+            args:
+                APP_ENV: dev
+        container_name: ntp-neocrops-api
+        ports:
+            - "127.0.0.1:8080:80"
+        volumes:
+            - .:/var/www/html
+        env_file:
+            - .env
+        depends_on:
+            - postgres
+        restart: unless-stopped
+
+    postgres:
+        image: postgres:16
+        container_name: ntp-neocrops-postgres
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: neocrops
+        ports:
+            - "5432:5432"
+        volumes:
+            - postgres_data:/var/lib/postgresql/data
+        restart: unless-stopped
+volumes:
+    postgres_data:
