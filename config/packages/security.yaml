@@ -1,7 +1,7 @@
 security:
     password_hashers:
         App\Entity\User:
-            id: App\Security\PasswordHasher
+            id: App\Core\Security\PasswordHasher
 
     providers:
         app_user_provider:
@@ -16,7 +16,7 @@ security:
             pattern: ^/login
             stateless: true
             custom_authenticators:
-                - App\Security\UserAuthenticator
+                - App\Core\Security\UserAuthenticator
         main:
             lazy: true
             provider: app_user_provider

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Security;
+namespace App\Core\Security;
 
+use App\Core\Service\TokenService;
 use App\Entity\User;
 use App\Repository\UserRepository;
-use App\Service\TokenService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Security;
+namespace App\Core\Security;
 
 use SensitiveParameter;
 use Symfony\Component\PasswordHasher\PasswordHasherInterface;

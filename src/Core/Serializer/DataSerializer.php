@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Serializer;
+namespace App\Core\Serializer;
 
 use Exception;
 use RuntimeException;

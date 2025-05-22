@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Service;
+namespace App\Core\Service;
 
+use App\Core\Serializer\DataSerializer;
 use App\Entity\RefreshToken;
 use App\Entity\User;
 use App\Repository\RefreshTokenRepository;
-use App\Serializer\DataSerializer;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
@@ -17,7 +17,6 @@ use Random\RandomException;
 use RuntimeException;
 use stdClass;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
