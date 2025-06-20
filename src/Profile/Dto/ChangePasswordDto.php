@@ -8,7 +8,6 @@ use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
 class ChangePasswordDto
 {
-
     #[Assert\NotBlank]
     #[Assert\NotNull]
     #[SecurityAssert\UserPassword]
