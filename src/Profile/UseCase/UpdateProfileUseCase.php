@@ -2,6 +2,7 @@
 
 namespace App\Profile\UseCase;
 
+use App\Core\Service\ContextService;
 use App\Core\UseCase\AbstractUseCase;
 use App\Entity\User;
 use App\Profile\Dto\UpdateProfileDto;
@@ -13,24 +14,25 @@ use RuntimeException;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
-class UpdateProfileUseCase extends AbstractUseCase
+class UpdateProfileUseCase
 {
+    private ContextService $contextService;
     private UserRepository $userRepository;
 
-    public function __construct(EntityManagerInterface $entityManager, Security $security, UserRepository $userRepository)
+    public function __construct(ContextService $contextService, UserRepository $userRepository)
     {
-        parent::__construct($entityManager, $security);
-
+        $this->contextService = $contextService;
         $this->userRepository = $userRepository;
     }
 
     public function execute(UpdateProfileDto $updateProfileDto): User
     {
         /** @var User $user */
-        $user = $this->security->getUser();
+        $user = $this->contextService->security->getUser();
 
         try {
             $user->setFullName($updateProfileDto->getFullName());
+            $user->setEmail($updateProfileDto->getEmail());
 
             $this->userRepository->save($user, true);
 

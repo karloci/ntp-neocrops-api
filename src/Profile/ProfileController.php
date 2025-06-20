@@ -28,5 +28,4 @@ class ProfileController extends ApiController
 
         return $this->getHttpOkResponse("The password has been successfully changed");
     }
-
 }

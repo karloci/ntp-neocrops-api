@@ -16,14 +16,12 @@ class RefreshTokenUseCase
 {
     private ContextService $contextService;
     private UserRepository $userRepository;
-    private UserPasswordHasherInterface $passwordHasher;
     private TokenService $tokenService;
 
-    public function __construct(ContextService $contextService, UserRepository $userRepository, UserPasswordHasherInterface $passwordHasher, TokenService $tokenService)
+    public function __construct(ContextService $contextService, UserRepository $userRepository, TokenService $tokenService)
     {
         $this->contextService = $contextService;
         $this->userRepository = $userRepository;
-        $this->passwordHasher = $passwordHasher;
         $this->tokenService = $tokenService;
     }
 

@@ -93,7 +93,7 @@ class TokenService
             "refreshToken" => $refreshToken,
             "user"         => $user,
             "farm"         => $user->getFarm()
-        ], ["user:default", "farm:default", "farm:country", "farm:city", "farm:timezone"]);
+        ], ["user:default", "farm:default"]);
 
         $response = JsonResponse::fromJsonString($data, Response::HTTP_OK);
 
