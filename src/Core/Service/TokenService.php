@@ -2,10 +2,10 @@
 
 namespace App\Core\Service;
 
+use App\Authentication\Entity\RefreshToken;
+use App\Authentication\Repository\RefreshTokenRepository;
 use App\Core\Serializer\DataSerializer;
-use App\Entity\RefreshToken;
 use App\Entity\User;
-use App\Repository\RefreshTokenRepository;
 use DateInterval;
 use DateTime;
 use DateTimeImmutable;
@@ -17,10 +17,10 @@ use Random\RandomException;
 use RuntimeException;
 use stdClass;
 use Symfony\Bundle\SecurityBundle\Security;
+use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Security\Core\Exception\TokenNotFoundException;
 
 class TokenService
 {
@@ -39,32 +39,20 @@ class TokenService
 
     public function revokeRefreshToken(string $token, bool $withFlush = true): void
     {
-        /** @var User $user */
+        /** @var User|null $user */
         $user = $this->security->getUser();
 
-        foreach ($user->getRefreshTokens() as $refreshToken) {
-            if ($refreshToken->getToken() === $token) {
-                $this->refreshTokenRepository->delete($refreshToken, $withFlush);
+        if (!is_null($user)) {
+            foreach ($user->getRefreshTokens() as $refreshToken) {
+                if ($refreshToken->getToken() === $token) {
+                    $this->refreshTokenRepository->delete($refreshToken, $withFlush);
+                }
             }
         }
     }
 
-    public function verifyToken(string $token): bool
+    public function extractAccessTokenFromRequest(Request $request): ?string
     {
-        try {
-            JWT::decode($token, new Key($this->tokenSecret, "HS256"));
-        }
-        catch (SignatureInvalidException|ExpiredException) {
-            return false;
-        }
-
-        return true;
-    }
-
-    public function extractAccessTokenFromRequest(Request $request): string
-    {
-        $payload = json_decode($request->getContent(), true);
-
         if ($request->headers->has("Authorization")) {
             $authorizationHeader = $request->headers->get("Authorization");
 
@@ -73,14 +61,14 @@ class TokenService
             }
         }
 
-        if (!is_null($payload) && array_key_exists("accessToken", $payload)) {
-            return $payload["accessToken"];
+        if ($request->cookies->has("accessToken")) {
+            return $request->cookies->get("accessToken");
         }
 
-        throw new TokenNotFoundException();
+        return null;
     }
 
-    public function extractRefreshTokenFromRequest(Request $request): string
+    public function extractRefreshTokenFromRequest(Request $request): ?string
     {
         $payload = json_decode($request->getContent(), true);
 
@@ -88,7 +76,11 @@ class TokenService
             return $payload["refreshToken"];
         }
 
-        throw new TokenNotFoundException();
+        if ($request->cookies->has("refreshToken")) {
+            return $request->cookies->get("refreshToken");
+        }
+
+        return null;
     }
 
     public function provideAuthenticationResponse(User $user): JsonResponse
@@ -100,10 +92,15 @@ class TokenService
             "accessToken"  => $accessToken,
             "refreshToken" => $refreshToken,
             "user"         => $user,
-            "farm"         => $user->getFarm(),
-        ], ["user:default", "farm:default"]);
+            "farm"         => $user->getFarm()
+        ], ["user:default", "farm:default", "farm:country", "farm:city", "farm:timezone"]);
 
-        return JsonResponse::fromJsonString($data, Response::HTTP_OK);
+        $response = JsonResponse::fromJsonString($data, Response::HTTP_OK);
+
+        $response->headers->setCookie($this->getAccessTokenCookie($accessToken));
+        $response->headers->setCookie($this->getRefreshTokenCookie($refreshToken));
+
+        return $response;
     }
 
     public function generateAccessToken(User $user): string
@@ -153,8 +150,39 @@ class TokenService
         return $token;
     }
 
-    public function decodeToken(string $token): stdClass
+    public function getAccessTokenCookie(?string $token): Cookie
     {
-        return JWT::decode($token, new Key($this->tokenSecret, "HS256"));
+        $expiration = is_null($token) ? time() : $this->decodeToken($token)?->exp;
+
+        return new Cookie(
+            name: "accessToken",
+            value: $token,
+            expire: $expiration,
+            secure: true,
+            sameSite: Cookie::SAMESITE_NONE
+        );
+    }
+
+    public function decodeToken(string $token): ?stdClass
+    {
+        try {
+            return JWT::decode($token, new Key($this->tokenSecret, "HS256"));
+        }
+        catch (SignatureInvalidException|ExpiredException) {
+            return null;
+        }
+    }
+
+    public function getRefreshTokenCookie(?string $token): Cookie
+    {
+        $expiration = is_null($token) ? time() : $this->decodeToken($token)?->exp;
+
+        return new Cookie(
+            name: "refreshToken",
+            value: $token,
+            expire: $expiration,
+            secure: true,
+            sameSite: Cookie::SAMESITE_NONE
+        );
     }
 }

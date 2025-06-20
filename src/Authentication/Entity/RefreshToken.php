@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Authentication\Entity;
 
-use App\Repository\RefreshTokenRepository;
+use App\Authentication\Repository\RefreshTokenRepository;
+use App\Entity\User;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

@@ -24,7 +24,7 @@ services:
         arguments:
             $tokenSecret: '%env(TOKEN_SECRET)%'
             $security: '@Symfony\Bundle\SecurityBundle\Security'
-            $refreshTokenRepository: '@App\Repository\RefreshTokenRepository'
+            $refreshTokenRepository: '@App\Authentication\Repository\RefreshTokenRepository'
             $dataSerializer: '@App\Core\Serializer\DataSerializer'
 
     # add more service definitions when explicit configuration is needed

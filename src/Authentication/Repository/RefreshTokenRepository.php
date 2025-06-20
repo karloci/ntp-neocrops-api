@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\Authentication\Repository;
 
-use App\Entity\RefreshToken;
+use App\Authentication\Entity\RefreshToken;
+use App\Repository\AbstractRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 class RefreshTokenRepository extends AbstractRepository
