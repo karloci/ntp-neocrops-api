@@ -5,10 +5,10 @@ services:
             context: .
             dockerfile: Dockerfile
             args:
-                APP_ENV: dev
+                APP_ENV: prod
         container_name: ntp-neocrops-api
         ports:
-            - "127.0.0.1:8080:80"
+            - "8081:80"
         volumes:
             - .:/var/www/html
         env_file:

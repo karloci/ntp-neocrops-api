@@ -20,6 +20,10 @@ services:
             - '../src/Entity/'
             - '../src/Kernel.php'
 
+    App\Core\EventListener\ExceptionListener:
+        arguments:
+            $isDebugMode: '%kernel.debug%'
+
     App\Core\Service\TokenService:
         arguments:
             $tokenSecret: '%env(TOKEN_SECRET)%'

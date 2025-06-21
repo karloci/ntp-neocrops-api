@@ -3,8 +3,10 @@
 namespace App\Authentication\Controller;
 
 use App\Authentication\Dto\LoginDto;
+use App\Authentication\Dto\RegisterDto;
 use App\Authentication\UseCase\LoginUseCase;
 use App\Authentication\UseCase\RefreshTokenUseCase;
+use App\Authentication\UseCase\RegisterUseCase;
 use App\Core\Controller\ApiController;
 use App\Core\Service\TokenService;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,6 +20,14 @@ final class AuthenticationController extends ApiController
     public function login(#[MapRequestPayload] LoginDto $loginDto, LoginUseCase $loginUseCase, TokenService $tokenService): JsonResponse
     {
         $user = $loginUseCase->execute($loginDto);
+
+        return $tokenService->provideAuthenticationResponse($user);
+    }
+
+    #[Route("/authentication/register", name: "authentication_register", methods: ["POST"])]
+    public function register(#[MapRequestPayload] RegisterDto $registerDto, RegisterUseCase $registerUseCase, TokenService $tokenService): JsonResponse
+    {
+        $user = $registerUseCase->execute($registerDto);
 
         return $tokenService->provideAuthenticationResponse($user);
     }
