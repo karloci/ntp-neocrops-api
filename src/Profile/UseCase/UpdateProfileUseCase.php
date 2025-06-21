@@ -2,11 +2,13 @@
 
 namespace App\Profile\UseCase;
 
+use App\Authentication\Exception\UniqueUserException;
 use App\Core\Service\ContextService;
 use App\Core\UseCase\AbstractUseCase;
 use App\Entity\User;
 use App\Profile\Dto\UpdateProfileDto;
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
@@ -37,6 +39,9 @@ class UpdateProfileUseCase
             $this->userRepository->save($user, true);
 
             return $user;
+        }
+        catch (UniqueConstraintViolationException) {
+            throw new UniqueUserException($this->contextService->translate("User with this email address already exists"));
         }
         catch (ORMException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);
