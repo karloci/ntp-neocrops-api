@@ -27,6 +27,10 @@ class Farm
     #[Groups(["farm:default"])]
     private ?string $countryIsoCode = null;
 
+    #[ORM\Column(length: 5)]
+    #[Groups(["farm:default"])]
+    private ?string $postalCode = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -66,5 +70,15 @@ class Farm
         $this->countryIsoCode = $countryIsoCode;
 
         return $this;
+    }
+
+    public function getPostalCode(): ?string
+    {
+        return $this->postalCode;
+    }
+
+    public function setPostalCode(?string $postalCode): void
+    {
+        $this->postalCode = $postalCode;
     }
 }

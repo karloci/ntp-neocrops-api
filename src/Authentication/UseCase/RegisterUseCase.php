@@ -40,6 +40,7 @@ class RegisterUseCase
             $farm->setName($registerDto->getFarmName());
             $farm->setOib($registerDto->getFarmOib());
             $farm->setCountryIsoCode($registerDto->getFarmCountryIsoCode());
+            $farm->setPostalCode($registerDto->getFarmPostalCode());
             $this->farmRepository->save($farm);
 
             $user = new User();

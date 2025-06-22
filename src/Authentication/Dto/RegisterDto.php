@@ -43,6 +43,11 @@ class RegisterDto
     #[Assert\Length(max: 2)]
     private string $farmCountryIsoCode;
 
+    #[Assert\NotBlank]
+    #[Assert\NotNull]
+    #[Assert\Length(max: 5)]
+    private string $farmPostalCode;
+
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context): void
     {
@@ -121,5 +126,15 @@ class RegisterDto
     public function setFarmCountryIsoCode(string $farmCountryIsoCode): void
     {
         $this->farmCountryIsoCode = $farmCountryIsoCode;
+    }
+
+    public function getFarmPostalCode(): string
+    {
+        return $this->farmPostalCode;
+    }
+
+    public function setFarmPostalCode(string $farmPostalCode): void
+    {
+        $this->farmPostalCode = $farmPostalCode;
     }
 }
