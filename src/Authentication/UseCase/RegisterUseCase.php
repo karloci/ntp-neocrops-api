@@ -47,7 +47,7 @@ class RegisterUseCase
             $user->setFullName($registerDto->getFullName());
             $user->setEmail($registerDto->getEmail());
             $user->setPassword($this->passwordHasher->hashPassword($user, $registerDto->getPassword()));
-            $user->setFarm($farm);
+            $user->setUserFarm($farm);
 
             $this->userRepository->save($user, true);
 

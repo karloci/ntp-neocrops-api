@@ -12,24 +12,27 @@ class Farm
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["farm:default"])]
+    #[Groups(["farm:default", "user:farm"])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(["farm:default"])]
+    #[Groups(["farm:default", "user:farm"])]
     private ?string $name = null;
 
     #[ORM\Column(length: 11, unique: true)]
-    #[Groups(["farm:default"])]
+    #[Groups(["farm:default", "user:farm"])]
     private ?string $oib = null;
 
     #[ORM\Column(length: 2)]
-    #[Groups(["farm:default"])]
+    #[Groups(["farm:default", "user:farm"])]
     private ?string $countryIsoCode = null;
 
     #[ORM\Column(length: 5)]
-    #[Groups(["farm:default"])]
+    #[Groups(["farm:default", "user:farm"])]
     private ?string $postalCode = null;
+
+    #[ORM\OneToOne(mappedBy: "userFarm", cascade: ["persist", "remove"])]
+    private ?User $owner = null;
 
     public function getId(): ?int
     {
@@ -80,5 +83,22 @@ class Farm
     public function setPostalCode(?string $postalCode): void
     {
         $this->postalCode = $postalCode;
+    }
+
+    public function getOwner(): ?User
+    {
+        return $this->owner;
+    }
+
+    public function setOwner(User $owner): static
+    {
+        // set the owning side of the relation if necessary
+        if ($owner->getUserFarm() !== $this) {
+            $owner->setUserFarm($this);
+        }
+
+        $this->owner = $owner;
+
+        return $this;
     }
 }

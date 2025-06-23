@@ -91,9 +91,8 @@ class TokenService
         $data = $this->dataSerializer->serialize([
             "accessToken"  => $accessToken,
             "refreshToken" => $refreshToken,
-            "user"         => $user,
-            "farm"         => $user->getFarm()
-        ], ["user:default", "farm:default"]);
+            "user"         => $user
+        ], ["user:default", "user:farm", "farm:default"]);
 
         $response = JsonResponse::fromJsonString($data, Response::HTTP_OK);
 

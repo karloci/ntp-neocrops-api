@@ -13,8 +13,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[ORM\Table(name: '`user`')]
-#[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[ORM\Table(name: "`user`")]
+#[ORM\UniqueConstraint(name: "UNIQ_IDENTIFIER_EMAIL", fields: ["email"])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -49,8 +49,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["user:refreshTokens"])]
     private Collection $refreshTokens;
 
-    #[ORM\ManyToOne]
-    private ?Farm $farm = null;
+    #[ORM\OneToOne(inversedBy: "owner", cascade: ["persist", "remove"])]
+    #[ORM\JoinColumn(name: "farm_id", nullable: false)]
+    #[Groups(["user:farm"])]
+    private ?Farm $userFarm = null;
 
     public function __construct()
     {
@@ -95,7 +97,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $roles = $this->roles;
         // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        $roles[] = "ROLE_USER";
 
         return array_unique($roles);
     }
@@ -167,14 +169,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getFarm(): ?Farm
+    public function getUserFarm(): ?Farm
     {
-        return $this->farm;
+        return $this->userFarm;
     }
 
-    public function setFarm(?Farm $farm): static
+    public function setUserFarm(Farm $userFarm): static
     {
-        $this->farm = $farm;
+        $this->userFarm = $userFarm;
 
         return $this;
     }
