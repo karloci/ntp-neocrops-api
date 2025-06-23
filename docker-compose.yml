@@ -23,7 +23,7 @@ services:
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: neocrops
+            POSTGRES_DB: ntp_neocrops
         ports:
             - "5432:5432"
         volumes:

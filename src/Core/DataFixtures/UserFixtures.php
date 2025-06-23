@@ -25,6 +25,8 @@ class UserFixtures extends Fixture
         $testFarm->setCountryIsoCode("HR");
         $testFarm->setPostalCode("10360");
 
+        $manager->persist($testFarm);
+
         $testUser = new User();
         $testUser->setFullName("Test Test");
         $testUser->setEmail("test@neocrops.com");

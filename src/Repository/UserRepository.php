@@ -36,7 +36,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
     {
         return $this->createQueryBuilder("user")
             ->addSelect("farm")
-            ->leftJoin("user.farm", "farm")
+            ->leftJoin("user.userFarm", "farm")
             ->andWhere("user.email = :identifier")
             ->setParameter("identifier", $identifier)
             ->setMaxResults(1)
@@ -49,7 +49,7 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
         return $this->createQueryBuilder("user")
             ->addSelect("farm")
             ->addSelect("refreshToken")
-            ->leftJoin("user.farm", "farm")
+            ->leftJoin("user.userFarm", "farm")
             ->leftJoin("user.refreshTokens", "refreshToken")
             ->andWhere("user.email = :identifier")
             ->setParameter("identifier", $identifier)

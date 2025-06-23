@@ -24,14 +24,16 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TokenService
 {
-    private string $tokenSecret;
+    private string $encryptionSecret;
+    private string $signatureSecret;
     private Security $security;
     private RefreshTokenRepository $refreshTokenRepository;
     private DataSerializer $dataSerializer;
 
-    public function __construct(string $tokenSecret, Security $security, RefreshTokenRepository $refreshTokenRepository, DataSerializer $dataSerializer)
+    public function __construct(string $encryptionSecret, string $signatureSecret, Security $security, RefreshTokenRepository $refreshTokenRepository, DataSerializer $dataSerializer)
     {
-        $this->tokenSecret = $tokenSecret;
+        $this->encryptionSecret = $encryptionSecret;
+        $this->signatureSecret = $signatureSecret;
         $this->security = $security;
         $this->refreshTokenRepository = $refreshTokenRepository;
         $this->dataSerializer = $dataSerializer;
@@ -116,14 +118,13 @@ class TokenService
     public function encodeToken(User $user, DateTimeImmutable $issuedAt, DateTimeImmutable $expiresAt): string
     {
         try {
-            return JWT::encode([
-                "iss" => "https://api.neocrops.com",
-                "aud" => "https://app.neocrops.com",
+            $payload = [
                 "sub" => $user->getUserIdentifier(),
                 "iat" => $issuedAt->getTimestamp(),
                 "exp" => $expiresAt->getTimestamp(),
                 "jti" => bin2hex(random_bytes(16))
-            ], $this->tokenSecret, "HS256");
+            ];
+            return $this->encrypt($payload);
         }
         catch (RandomException $e) {
             throw new RuntimeException("Failed to generate token identifier", 0, $e);
@@ -162,14 +163,14 @@ class TokenService
         );
     }
 
-    public function decodeToken(string $token): ?stdClass
+    public function decodeToken(string $token): ?object
     {
-        try {
-            return JWT::decode($token, new Key($this->tokenSecret, "HS256"));
-        }
-        catch (SignatureInvalidException|ExpiredException) {
+        $data = $this->decrypt($token);
+        if (!$data || !isset($data["exp"]) || $data["exp"] < time()) {
             return null;
         }
+
+        return json_decode(json_encode($data));
     }
 
     public function getRefreshTokenCookie(?string $token): Cookie
@@ -183,5 +184,35 @@ class TokenService
             secure: true,
             sameSite: Cookie::SAMESITE_NONE
         );
+    }
+
+    private function encrypt(array $payload): string
+    {
+        $iv = random_bytes(16);
+        $data = json_encode($payload);
+        $cipherText = openssl_encrypt($data, "aes-256-cbc", $this->encryptionSecret, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac("sha256", $iv . $cipherText, $this->signatureSecret, true);
+
+        return base64_encode($iv . $hmac . $cipherText);
+    }
+
+    private function decrypt(string $token): ?array
+    {
+        $decoded = base64_decode($token);
+        if (strlen($decoded) < 48) { // 16 iv + 32 hmac = 48 B
+            return null;
+        }
+
+        $iv = substr($decoded, 0, 16);
+        $hmac = substr($decoded, 16, 32);
+        $cipherText = substr($decoded, 48);
+
+        $calculatedHmac = hash_hmac("sha256", $iv . $cipherText, $this->signatureSecret, true);
+        if (!hash_equals($hmac, $calculatedHmac)) {
+            return null;
+        }
+
+        $json = openssl_decrypt($cipherText, "aes-256-cbc", $this->encryptionSecret, OPENSSL_RAW_DATA, $iv);
+        return json_decode($json, true);
     }
 }
