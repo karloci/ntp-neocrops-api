@@ -45,7 +45,7 @@ class RegisterDto
 
     #[Assert\NotBlank]
     #[Assert\NotNull]
-    #[Assert\Length(max: 5)]
+    #[Assert\Length(exactly: 5)]
     private string $farmPostalCode;
 
     #[Assert\Callback]
