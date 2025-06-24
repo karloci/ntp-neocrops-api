@@ -3,6 +3,7 @@
 namespace App\User\Controller;
 
 use App\Core\Controller\ApiController;
+use App\Country\UseCase\DeleteUserUseCase;
 use App\Entity\Farm;
 use App\User\Dto\UserDto;
 use App\User\UseCase\CreateUserUseCase;
@@ -38,13 +39,11 @@ class UserController extends ApiController
         return $this->getHttpOkResponse($user, ["user:default"]);
     }
 
-    /*
-
     #[Route("/users/{userId}", name: "users_delete", methods: ["DELETE"])]
     public function deleteUser(string $userId, DeleteUserUseCase $deleteUserUseCase): JsonResponse
     {
         $deleteUserUseCase->execute($userId);
 
         return $this->getHttpNoContentResponse();
-    }*/
+    }
 }
