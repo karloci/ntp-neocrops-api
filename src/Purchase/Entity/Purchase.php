@@ -2,6 +2,8 @@
 
 namespace App\Purchase\Entity;
 ;
+
+use App\Farm\Entity\Farm;
 use App\Purchase\Repository\PurchaseRepository;
 use App\Supply\Entity\Supply;
 use DateTimeImmutable;
@@ -26,25 +28,30 @@ class Purchase
     private ?Supply $supply = null;
 
     #[ORM\Column(name: "amount", type: Types::FLOAT, nullable: false)]
-    #[Groups(["supply:default"])]
+    #[Groups(["purchase:default"])]
     private ?float $amount = null;
 
     #[ORM\Column(name: "price", type: Types::FLOAT, nullable: false)]
-    #[Groups(["supply:default"])]
+    #[Groups(["purchase:default"])]
     private ?float $price = null;
 
     #[ORM\Column(name: "transaction_date", type: Types::DATE_IMMUTABLE, unique: false, nullable: false)]
     #[Context([DateTimeNormalizer::FORMAT_KEY => "Y-m-d"])]
-    #[Groups(["cropRotation:default"])]
+    #[Groups(["purchase:date"])]
     private ?DateTimeImmutable $date = null;
 
     #[ORM\Column(name: "invoice_no", type: Types::STRING, length: 45, nullable: true)]
-    #[Groups(["supply:default"])]
+    #[Groups(["purchase:default"])]
     private ?string $invoiceNo = null;
 
     #[ORM\Column(name: "comment", type: Types::TEXT, length: 45, nullable: true)]
-    #[Groups(["supply:default"])]
+    #[Groups(["purchase:default"])]
     private ?string $comment = null;
+
+    #[ORM\ManyToOne(inversedBy: "purchases")]
+    #[ORM\JoinColumn(name: "farm_id", referencedColumnName: "id", unique: false, nullable: false)]
+    #[Groups(["purchase:farm"])]
+    private ?Farm $farm = null;
 
     public function getId(): ?int
     {
@@ -109,5 +116,15 @@ class Purchase
     public function setComment(?string $comment): void
     {
         $this->comment = $comment;
+    }
+
+    public function getFarm(): ?Farm
+    {
+        return $this->farm;
+    }
+
+    public function setFarm(?Farm $farm): void
+    {
+        $this->farm = $farm;
     }
 }
