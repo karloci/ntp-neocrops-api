@@ -2,6 +2,7 @@
 
 namespace App\User\Repository;
 
+use App\Entity\Farm;
 use App\Repository\AbstractRepository;
 use App\User\Entity\User;
 use DateTime;
@@ -71,5 +72,14 @@ class UserRepository extends AbstractRepository implements PasswordUpgraderInter
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function findAllUsersByFarm(Farm $farm)
+    {
+        return $this->createQueryBuilder("user")
+            ->andWhere("user.userFarm = :farm")
+            ->setParameter("farm", $farm)
+            ->getQuery()
+            ->getResult();
     }
 }

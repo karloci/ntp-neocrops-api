@@ -2,10 +2,10 @@
 
 namespace App\Profile\UseCase;
 
-use App\Authentication\Exception\UniqueUserException;
 use App\Core\Service\ContextService;
 use App\Profile\Dto\UpdateProfileDto;
 use App\User\Entity\User;
+use App\User\Exception\UniqueUserException;
 use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;

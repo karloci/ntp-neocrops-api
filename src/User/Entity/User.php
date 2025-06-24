@@ -50,8 +50,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(["user:refreshTokens"])]
     private Collection $refreshTokens;
 
-    #[ORM\OneToOne(inversedBy: "owner", cascade: ["persist", "remove"])]
-    #[ORM\JoinColumn(name: "farm_id", nullable: false)]
+
+    #[ORM\ManyToOne(inversedBy: "users")]
+    #[ORM\JoinColumn(name: "farm_id", referencedColumnName: "id", unique: false, nullable: false)]
     #[Groups(["user:farm"])]
     private ?Farm $userFarm = null;
 

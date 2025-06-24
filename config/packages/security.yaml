@@ -1,6 +1,6 @@
 security:
     password_hashers:
-        App\Entity\User:
+        App\User\Entity\User:
             id: App\Core\Security\PasswordHasher
 
     providers:

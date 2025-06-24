@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FarmRepository;
 use App\User\Entity\User;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 
@@ -32,8 +33,11 @@ class Farm
     #[Groups(["farm:default", "user:farm"])]
     private ?string $postalCode = null;
 
-    #[ORM\OneToOne(mappedBy: "userFarm", cascade: ["persist", "remove"])]
-    private ?User $owner = null;
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\OneToMany(targetEntity: User::class, mappedBy: "userFarm")]
+    private Collection $users;
 
     public function getId(): ?int
     {
@@ -86,19 +90,20 @@ class Farm
         $this->postalCode = $postalCode;
     }
 
-    public function getOwner(): ?User
+    /**
+     * @return Collection<int, User>
+     */
+    public function getUsers(): Collection
     {
-        return $this->owner;
+        return $this->users;
     }
 
-    public function setOwner(User $owner): static
+    public function addUser(User $user): static
     {
-        // set the owning side of the relation if necessary
-        if ($owner->getUserFarm() !== $this) {
-            $owner->setUserFarm($this);
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->setUserFarm($this);
         }
-
-        $this->owner = $owner;
 
         return $this;
     }

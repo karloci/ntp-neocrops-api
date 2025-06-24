@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Authentication\Exception;
+namespace App\User\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;

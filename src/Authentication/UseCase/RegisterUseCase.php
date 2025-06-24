@@ -3,11 +3,11 @@
 namespace App\Authentication\UseCase;
 
 use App\Authentication\Dto\RegisterDto;
-use App\Authentication\Exception\UniqueUserException;
 use App\Core\Service\ContextService;
 use App\Entity\Farm;
 use App\Repository\FarmRepository;
 use App\User\Entity\User;
+use App\User\Exception\UniqueUserException;
 use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Exception;

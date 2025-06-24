@@ -34,6 +34,16 @@ class UserFixtures extends Fixture
         $testUser->setUserFarm($testFarm);
 
         $manager->persist($testUser);
+
+        $adminUser = new User();
+        $adminUser->setFullName("Admin Admin");
+        $adminUser->setEmail("admin@neocrops.com");
+        $adminUser->setPassword($this->passwordHasher->hashPassword($adminUser, "admin"));
+        $adminUser->setRoles(["ROLE_ADMIN"]);
+        $adminUser->setUserFarm($testFarm);
+
+        $manager->persist($adminUser);
+
         $manager->flush();
     }
 }
