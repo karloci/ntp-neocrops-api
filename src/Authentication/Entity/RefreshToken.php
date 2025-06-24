@@ -3,7 +3,7 @@
 namespace App\Authentication\Entity;
 
 use App\Authentication\Repository\RefreshTokenRepository;
-use App\Entity\User;
+use App\User\Entity\User;
 use DateTimeImmutable;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;

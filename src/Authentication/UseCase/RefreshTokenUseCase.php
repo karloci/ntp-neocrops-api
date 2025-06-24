@@ -4,12 +4,11 @@ namespace App\Authentication\UseCase;
 
 use App\Core\Service\ContextService;
 use App\Core\Service\TokenService;
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\User\Entity\User;
+use App\User\Repository\UserRepository;
 use Exception;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
 
 class RefreshTokenUseCase

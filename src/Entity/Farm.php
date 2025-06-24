@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FarmRepository;
+use App\User\Entity\User;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
 

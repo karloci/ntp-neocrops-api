@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Entity;
+namespace App\User\Entity;
 
 use App\Authentication\Entity\RefreshToken;
-use App\Repository\UserRepository;
+use App\Entity\Farm;
+use App\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;

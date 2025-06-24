@@ -3,9 +3,9 @@
 namespace App\Profile\UseCase;
 
 use App\Core\Service\ContextService;
-use App\Entity\User;
 use App\Profile\Dto\ChangePasswordDto;
-use App\Repository\UserRepository;
+use App\User\Entity\User;
+use App\User\Repository\UserRepository;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use RuntimeException;

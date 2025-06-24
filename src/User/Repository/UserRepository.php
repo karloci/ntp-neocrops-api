@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\User\Repository;
 
-use App\Entity\User;
+use App\Repository\AbstractRepository;
+use App\User\Entity\User;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bridge\Doctrine\Security\User\UserLoaderInterface;

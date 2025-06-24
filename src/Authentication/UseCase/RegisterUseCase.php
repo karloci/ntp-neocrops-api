@@ -6,15 +6,13 @@ use App\Authentication\Dto\RegisterDto;
 use App\Authentication\Exception\UniqueUserException;
 use App\Core\Service\ContextService;
 use App\Entity\Farm;
-use App\Entity\User;
 use App\Repository\FarmRepository;
-use App\Repository\UserRepository;
-use DateTimeImmutable;
+use App\User\Entity\User;
+use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Exception;
 use Random\RandomException;
 use RuntimeException;
-use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 

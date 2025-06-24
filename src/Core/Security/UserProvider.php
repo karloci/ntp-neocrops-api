@@ -2,8 +2,8 @@
 
 namespace App\Core\Security;
 
-use App\Entity\User;
-use App\Repository\UserRepository;
+use App\User\Entity\User;
+use App\User\Repository\UserRepository;
 use Symfony\Component\Security\Core\Exception\UserNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;

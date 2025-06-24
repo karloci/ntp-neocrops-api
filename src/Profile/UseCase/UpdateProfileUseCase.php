@@ -4,16 +4,13 @@ namespace App\Profile\UseCase;
 
 use App\Authentication\Exception\UniqueUserException;
 use App\Core\Service\ContextService;
-use App\Core\UseCase\AbstractUseCase;
-use App\Entity\User;
 use App\Profile\Dto\UpdateProfileDto;
-use App\Repository\UserRepository;
+use App\User\Entity\User;
+use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use RuntimeException;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UpdateProfileUseCase
