@@ -35,10 +35,6 @@ class DeleteUserUseCase
             throw new AccessDeniedHttpException();
         }
 
-        if ($user->isDeleted()) {
-            return;
-        }
-
         try {
             $this->userRepository->delete($user, true);
         }
