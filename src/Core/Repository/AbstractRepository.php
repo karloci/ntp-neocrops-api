@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Repository;
+namespace App\Core\Repository;
 
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;

@@ -3,7 +3,7 @@
 namespace App\User\Controller;
 
 use App\Core\Controller\ApiController;
-use App\Entity\Farm;
+use App\Farm\Entity\Farm;
 use App\User\Dto\UserDto;
 use App\User\UseCase\CreateUserUseCase;
 use App\User\UseCase\DeleteUserUseCase;

@@ -3,7 +3,7 @@
 namespace App\User\Entity;
 
 use App\Authentication\Entity\RefreshToken;
-use App\Entity\Farm;
+use App\Farm\Entity\Farm;
 use App\User\Repository\UserRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

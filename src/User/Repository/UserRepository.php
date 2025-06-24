@@ -2,8 +2,8 @@
 
 namespace App\User\Repository;
 
-use App\Entity\Farm;
-use App\Repository\AbstractRepository;
+use App\Core\Repository\AbstractRepository;
+use App\Farm\Entity\Farm;
 use App\User\Entity\User;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;

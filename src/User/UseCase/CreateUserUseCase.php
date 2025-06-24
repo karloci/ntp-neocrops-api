@@ -2,16 +2,13 @@
 
 namespace App\User\UseCase;
 
-use App\Core\Security\PasswordHasher;
 use App\Core\Service\ContextService;
-use App\Entity\Farm;
+use App\Farm\Entity\Farm;
 use App\User\Dto\UserDto;
 use App\User\Entity\User;
 use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Exception;
-use Psr\Cache\InvalidArgumentException;
-use RuntimeException;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\ConflictHttpException;

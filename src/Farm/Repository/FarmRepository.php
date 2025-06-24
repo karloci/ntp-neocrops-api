@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Repository;
+namespace App\Farm\Repository;
 
-use App\Entity\Farm;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use App\Core\Repository\AbstractRepository;
+use App\Farm\Entity\Farm;
 use Doctrine\Persistence\ManagerRegistry;
 
 class FarmRepository extends AbstractRepository

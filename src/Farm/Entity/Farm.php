@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Farm\Entity;
 
-use App\Repository\FarmRepository;
+use App\Farm\Repository\FarmRepository;
 use App\User\Entity\User;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

@@ -3,7 +3,7 @@
 namespace App\User\UseCase;
 
 use App\Core\Service\ContextService;
-use App\Entity\Farm;
+use App\Farm\Entity\Farm;
 use App\User\Entity\User;
 use App\User\Repository\UserRepository;
 use Psr\Cache\InvalidArgumentException;
