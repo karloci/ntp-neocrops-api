@@ -14,29 +14,29 @@ class AppFixtures extends Fixture
     private UserPasswordHasherInterface $passwordHasher;
 
     private array $chemicals = [
-        ["Herbicide Alpha", "l", "Bayer"],
-        ["Fungicide Beta", "l", "Syngenta"],
-        ["Insecticide Gamma", "l", "BASF"],
-        ["Growth Regulator Delta", "l", "Corteva"],
-        ["Adjuvant Epsilon", "l", "UPL"],
-        ["Pesticide Zeta", "l", "Nufarm"],
-        ["Miticide Eta", "l", "FMC"],
-        ["Bactericide Theta", "l", "Adama"],
-        ["Soil Conditioner Iota", "l", "Valent"],
-        ["Desiccant Kappa", "l", "Arysta"],
+        ["Laudis OD", "L", "Bayer"],
+        ["Revus Top", "L", "Syngenta"],
+        ["Fastac SC", "L", "BASF"],
+        ["Moddus", "L", "Corteva"],
+        ["Break-Thru", "L", "UPL"],
+        ["Tazer 250 SC", "L", "Nufarm"],
+        ["Omite", "L", "FMC"],
+        ["Custodia", "L", "Adama"],
+        ["Preside SC", "L", "Valent"],
+        ["Desica", "L", "Arysta"],
     ];
 
     private array $fertilizers = [
-        ["Urea 46%", "kg", "Yara"],
-        ["NPK 15-15-15", "kg", "Petrokemija"],
-        ["Ammonium Nitrate", "kg", "EuroChem"],
-        ["DAP 18-46-0", "kg", "ICL"],
-        ["MAP 11-52-0", "kg", "Haifa"],
-        ["Potassium Sulfate", "kg", "K+S"],
-        ["Calcium Nitrate", "kg", "Yara"],
-        ["Liquid NPK", "l", "Timac Agro"],
-        ["Micronutrient Mix", "kg", "Tradecorp"],
-        ["Humic Acid", "l", "BioAg"],
+        ["YaraVera Urea 46%", "kg", "Yara"],
+        ["KAN 27% (NPK 15-15-15)", "kg", "Petrokemija"],
+        ["Nitrophoska Special", "kg", "EuroChem"],
+        ["Agrocote DAP 18-46-0", "kg", "ICL"],
+        ["Poly-Feed MAP 11-52-0", "kg", "Haifa"],
+        ["Kali SOP (Potassium Sulfate)", "kg", "K+S"],
+        ["YaraLiva Tropicote (Calcium Nitrate)", "kg", "Yara"],
+        ["Fertileader Elite (Liquid NPK)", "L", "Timac Agro"],
+        ["Nutricomplex Mix TE", "kg", "Tradecorp"],
+        ["HumaGro Humic Acid", "L", "BioAg"],
     ];
 
     public function __construct(UserPasswordHasherInterface $passwordHasher)

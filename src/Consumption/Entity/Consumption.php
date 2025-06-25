@@ -28,7 +28,7 @@ class Consumption
     private ?Supply $supply = null;
 
     #[ORM\Column(name: "amount", type: Types::FLOAT, nullable: false)]
-    #[Groups(["consumption:amount"])]
+    #[Groups(["consumption:default"])]
     private ?float $amount = null;
 
     #[ORM\Column(name: "transaction_date", type: Types::DATE_IMMUTABLE, unique: false, nullable: false)]

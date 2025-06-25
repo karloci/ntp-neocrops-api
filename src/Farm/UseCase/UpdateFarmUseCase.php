@@ -13,6 +13,7 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
 use RuntimeException;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class UpdateFarmUseCase
@@ -30,6 +31,10 @@ class UpdateFarmUseCase
     {
         /** @var User $user */
         $user = $this->contextService->security->getUser();
+
+        if (!$this->contextService->security->isGranted("ROLE_ADMIN")) {
+            throw new AccessDeniedHttpException();
+        }
 
         try {
             $farm = $user->getUserFarm();

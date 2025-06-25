@@ -13,19 +13,19 @@ class Supply
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(["supply:default"])]
+    #[Groups(["supply:default", "purchase:supply", "consumption:supply"])]
     private ?int $id = null;
 
     #[ORM\Column(name: "name", type: Types::STRING, length: 45, unique: true, nullable: false)]
-    #[Groups(["supply:default"])]
+    #[Groups(["supply:default", "purchase:supply", "consumption:supply"])]
     private ?string $name = null;
 
     #[ORM\Column(name: "measure_unit", type: Types::STRING, length: 5, nullable: false)]
-    #[Groups(["supply:default"])]
+    #[Groups(["supply:default", "purchase:supply", "consumption:supply"])]
     private ?string $measureUnit = null;
 
     #[ORM\Column(name: "manufacturer", type: Types::STRING, length: 45, nullable: false)]
-    #[Groups(["supply:default"])]
+    #[Groups(["supply:default", "purchase:supply", "consumption:supply"])]
     private ?string $manufacturer = null;
 
     public function getId(): ?int

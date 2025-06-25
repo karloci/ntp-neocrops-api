@@ -27,9 +27,9 @@ class Purchase
     #[Groups(["purchase:supply"])]
     private ?Supply $supply = null;
 
-    #[ORM\Column(name: "amount", type: Types::FLOAT, nullable: false)]
+    #[ORM\Column(name: "amount", type: Types::INTEGER, nullable: false)]
     #[Groups(["purchase:default"])]
-    private ?float $amount = null;
+    private ?int $amount = null;
 
     #[ORM\Column(name: "price", type: Types::FLOAT, nullable: false)]
     #[Groups(["purchase:default"])]
@@ -37,7 +37,7 @@ class Purchase
 
     #[ORM\Column(name: "transaction_date", type: Types::DATE_IMMUTABLE, unique: false, nullable: false)]
     #[Context([DateTimeNormalizer::FORMAT_KEY => "Y-m-d"])]
-    #[Groups(["purchase:date"])]
+    #[Groups(["purchase:default"])]
     private ?DateTimeImmutable $date = null;
 
     #[ORM\Column(name: "invoice_no", type: Types::STRING, length: 45, nullable: true)]
@@ -68,12 +68,12 @@ class Purchase
         $this->supply = $supply;
     }
 
-    public function getAmount(): ?float
+    public function getAmount(): ?int
     {
         return $this->amount;
     }
 
-    public function setAmount(?float $amount): void
+    public function setAmount(?int $amount): void
     {
         $this->amount = $amount;
     }
