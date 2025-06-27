@@ -24,4 +24,18 @@ class PurchaseRepository extends AbstractRepository
             ->getQuery()
             ->getResult();
     }
+
+    public function findAllPurchasesByFarmGroupBySupply(Farm $farm)
+    {
+        return $this->createQueryBuilder("purchase")
+            ->select("supply.id AS supplyId, supply.name, supply.measureUnit, supply.manufacturer")
+            ->addSelect("SUM(purchase.amount) AS totalAmount")
+            ->leftJoin("purchase.supply", "supply")
+            ->andWhere("purchase.farm = :farm")
+            ->setParameter("farm", $farm)
+            ->groupBy("supplyId, supply.name, supply.measureUnit, supply.manufacturer")
+            ->getQuery()
+            ->getResult();
+
+    }
 }

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Purchase\UseCase;
+namespace App\Consumption\UseCase;
 
 use App\Core\Service\ContextService;
-use App\Purchase\Entity\Purchase;
-use App\Purchase\Repository\PurchaseRepository;
+use App\Consumption\Entity\Consumption;
+use App\Consumption\Repository\ConsumptionRepository;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
 use RuntimeException;
@@ -12,33 +12,33 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
-class DeletePurchaseUseCase
+class DeleteConsumptionUseCase
 {
     private ContextService $contextService;
-    private PurchaseRepository $purchaseRepository;
+    private ConsumptionRepository $consumptionRepository;
 
-    public function __construct(ContextService $contextService, PurchaseRepository $purchaseRepository)
+    public function __construct(ContextService $contextService, ConsumptionRepository $consumptionRepository)
     {
         $this->contextService = $contextService;
-        $this->purchaseRepository = $purchaseRepository;
+        $this->consumptionRepository = $consumptionRepository;
     }
 
-    public function execute(string $purchaseId): void
+    public function execute(string $consumptionId): void
     {
-        $purchase = $this->purchaseRepository->findOneBy(["id" => $purchaseId]);
+        $consumption = $this->consumptionRepository->findOneBy(["id" => $consumptionId]);
 
-        if (is_null($purchase)) {
+        if (is_null($consumption)) {
             throw new NotFoundHttpException();
         }
 
-        if (!$this->contextService->security->isGranted("DELETE", $purchase)) {
+        if (!$this->contextService->security->isGranted("DELETE", $consumption)) {
             throw new AccessDeniedHttpException();
         }
 
         // TODO: provjera je li ima dovoljno na lageru
 
         try {
-            $this->purchaseRepository->delete($purchase, true);
+            $this->consumptionRepository->delete($consumption, true);
         }
         catch (Exception $e) {
             throw new BadRequestHttpException($e->getMessage(), $e);

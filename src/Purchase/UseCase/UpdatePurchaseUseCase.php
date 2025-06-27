@@ -40,6 +40,8 @@ class UpdatePurchaseUseCase
             throw new AccessDeniedHttpException();
         }
 
+        // TODO: provjera je li ima dovoljno na lageru
+
         try {
             $purchase->setSupply($this->contextService->entityManager->getReference(Supply::class, $purchaseDto->getSupply()));
             $purchase->setAmount($purchaseDto->getAmount());
