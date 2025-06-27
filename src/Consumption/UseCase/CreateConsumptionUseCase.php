@@ -2,11 +2,13 @@
 
 namespace App\Consumption\UseCase;
 
+use App\Consumption\Exception\InvalidConsumptionException;
 use App\Core\Service\ContextService;
 use App\Farm\Entity\Farm;
 use App\Consumption\Dto\ConsumptionDto;
 use App\Consumption\Entity\Consumption;
 use App\Consumption\Repository\ConsumptionRepository;
+use App\Inventory\Repository\InventoryRepository;
 use App\Supply\Entity\Supply;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\ORM\Exception\ORMException;
@@ -20,11 +22,13 @@ class CreateConsumptionUseCase
 {
     private ContextService $contextService;
     private ConsumptionRepository $consumptionRepository;
+    private InventoryRepository $inventoryRepository;
 
-    public function __construct(ContextService $contextService, ConsumptionRepository $consumptionRepository)
+    public function __construct(ContextService $contextService, ConsumptionRepository $consumptionRepository, InventoryRepository $inventoryRepository)
     {
         $this->contextService = $contextService;
         $this->consumptionRepository = $consumptionRepository;
+        $this->inventoryRepository = $inventoryRepository;
     }
 
     public function execute(ConsumptionDto $consumptionDto, Farm $farm): Consumption
@@ -33,7 +37,10 @@ class CreateConsumptionUseCase
             throw new AccessDeniedHttpException();
         }
 
-        // TODO: provjera je li ima dovoljno na lageru
+        $currentStock = $this->inventoryRepository->findStockForSupply($farm, $consumptionDto->getSupply());
+        if ($consumptionDto->getAmount() > $currentStock) {
+            throw new InvalidConsumptionException("Nema dovoljno na lageru!");
+        }
 
         try {
             $consumption = new Consumption();

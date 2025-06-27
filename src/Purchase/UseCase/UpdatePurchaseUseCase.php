@@ -2,7 +2,9 @@
 
 namespace App\Purchase\UseCase;
 
+use App\Consumption\Exception\InvalidConsumptionException;
 use App\Core\Service\ContextService;
+use App\Inventory\Repository\InventoryRepository;
 use App\Purchase\Dto\PurchaseDto;
 use App\Purchase\Entity\Purchase;
 use App\Purchase\Repository\PurchaseRepository;
@@ -21,15 +23,18 @@ class UpdatePurchaseUseCase
 {
     private ContextService $contextService;
     private PurchaseRepository $purchaseRepository;
+    private InventoryRepository $inventoryRepository;
 
-    public function __construct(ContextService $contextService, PurchaseRepository $purchaseRepository)
+    public function __construct(ContextService $contextService, PurchaseRepository $purchaseRepository, InventoryRepository $inventoryRepository)
     {
         $this->contextService = $contextService;
         $this->purchaseRepository = $purchaseRepository;
+        $this->inventoryRepository = $inventoryRepository;
     }
 
     public function execute(string $purchaseId, PurchaseDto $purchaseDto): Purchase
     {
+        /** @var Purchase $purchase */
         $purchase = $this->purchaseRepository->findOneBy(["id" => $purchaseId]);
 
         if (is_null($purchase)) {
@@ -40,7 +45,11 @@ class UpdatePurchaseUseCase
             throw new AccessDeniedHttpException();
         }
 
-        // TODO: provjera je li ima dovoljno na lageru
+        $currentStock = $this->inventoryRepository->findStockForSupply($purchase->getFarm(), $purchaseDto->getSupply());
+
+        if (($purchase->getAmount() - $purchaseDto->getAmount()) > $currentStock) {
+            throw new InvalidConsumptionException("Neće biti dovoljno na lageru!");
+        }
 
         try {
             $purchase->setSupply($this->contextService->entityManager->getReference(Supply::class, $purchaseDto->getSupply()));

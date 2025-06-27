@@ -4,18 +4,18 @@ namespace App\Inventory\UseCase;
 
 use App\Farm\Entity\Farm;
 
-class FindAvailableSuppliesUseCase
+class FindSuppliesUseCase
 {
-    private FindAllSuppliesStockUseCase $findAllSuppliesStockUseCase;
+    private FindAllStocksUseCase $findAllStocksUseCase;
 
-    public function __construct(FindAllSuppliesStockUseCase $findAllSuppliesStockUseCase)
+    public function __construct(FindAllStocksUseCase $findAllStocksUseCase)
     {
-        $this->findAllSuppliesStockUseCase = $findAllSuppliesStockUseCase;
+        $this->findAllStocksUseCase = $findAllStocksUseCase;
     }
 
     public function execute(Farm $farm)
     {
-        $inventoryStock = $this->findAllSuppliesStockUseCase->execute($farm);
+        $inventoryStock = $this->findAllStocksUseCase->execute($farm);
 
         $result = [];
         foreach ($inventoryStock as $stock) {

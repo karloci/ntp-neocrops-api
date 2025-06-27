@@ -7,7 +7,7 @@ use App\Farm\Entity\Farm;
 use App\Purchase\Repository\PurchaseRepository;
 use App\Supply\Entity\Supply;
 
-class FindAllSuppliesStockUseCase
+class FindAllStocksUseCase
 {
     private PurchaseRepository $purchaseRepository;
     private ConsumptionRepository $consumptionRepository;

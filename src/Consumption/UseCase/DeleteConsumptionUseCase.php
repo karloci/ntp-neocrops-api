@@ -2,9 +2,11 @@
 
 namespace App\Consumption\UseCase;
 
+use App\Consumption\Exception\InvalidConsumptionException;
 use App\Core\Service\ContextService;
 use App\Consumption\Entity\Consumption;
 use App\Consumption\Repository\ConsumptionRepository;
+use App\Inventory\Repository\InventoryRepository;
 use Exception;
 use Psr\Cache\InvalidArgumentException;
 use RuntimeException;
@@ -25,6 +27,7 @@ class DeleteConsumptionUseCase
 
     public function execute(string $consumptionId): void
     {
+        /** @var Consumption $consumption */
         $consumption = $this->consumptionRepository->findOneBy(["id" => $consumptionId]);
 
         if (is_null($consumption)) {
@@ -34,8 +37,6 @@ class DeleteConsumptionUseCase
         if (!$this->contextService->security->isGranted("DELETE", $consumption)) {
             throw new AccessDeniedHttpException();
         }
-
-        // TODO: provjera je li ima dovoljno na lageru
 
         try {
             $this->consumptionRepository->delete($consumption, true);

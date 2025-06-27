@@ -36,6 +36,5 @@ class ConsumptionRepository extends AbstractRepository
             ->groupBy("supplyId, supply.name, supply.measureUnit, supply.manufacturer")
             ->getQuery()
             ->getResult();
-
     }
 }
