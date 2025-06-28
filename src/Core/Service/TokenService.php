@@ -103,7 +103,7 @@ class TokenService
     {
         $issuedAt = new DateTime();
         $expiresAt = clone $issuedAt;
-        $expiresAt->add(DateInterval::createFromDateString("+5 minutes"));
+        $expiresAt->add(DateInterval::createFromDateString("+1 minute"));
         $expiresAt = DateTimeImmutable::createFromMutable($expiresAt);
         $issuedAt = DateTimeImmutable::createFromMutable($issuedAt);
 
