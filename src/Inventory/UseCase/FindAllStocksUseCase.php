@@ -38,9 +38,10 @@ class FindAllStocksUseCase
                 "name" => $purchase["name"],
                 "measureUnit" => $purchase["measureUnit"],
                 "manufacturer" => $purchase["manufacturer"],
+                "totalPrice" => $purchase["totalPrice"] * 1,
                 "purchasedAmount" => $purchase["totalAmount"],
-                "consumedAmount" => $consumed,
-                "stock" => $purchase["totalAmount"] - $consumed,
+                "consumedAmount" => $consumed * 1,
+                "stockAmount" => $purchase["totalAmount"] - $consumed,
             ];
         }
 

@@ -30,6 +30,7 @@ class PurchaseRepository extends AbstractRepository
         return $this->createQueryBuilder("purchase")
             ->select("supply.id AS supplyId, supply.name, supply.measureUnit, supply.manufacturer")
             ->addSelect("SUM(purchase.amount) AS totalAmount")
+            ->addSelect("SUM(purchase.price) AS totalPrice")
             ->leftJoin("purchase.supply", "supply")
             ->andWhere("purchase.farm = :farm")
             ->setParameter("farm", $farm)
