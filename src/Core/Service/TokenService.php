@@ -185,10 +185,10 @@ class TokenService
     {
         $iv = random_bytes(16);
         $data = json_encode($payload);
-        $cipherText = openssl_encrypt($data, "aes-256-cbc", $this->encryptionSecret, OPENSSL_RAW_DATA, $iv);
-        $hmac = hash_hmac("sha256", $iv . $cipherText, $this->signatureSecret, true);
+        $encryptedText = openssl_encrypt($data, "aes-256-cbc", $this->encryptionSecret, OPENSSL_RAW_DATA, $iv);
+        $hmac = hash_hmac("sha256", $iv . $encryptedText, $this->signatureSecret, true);
 
-        return base64_encode($iv . $hmac . $cipherText);
+        return base64_encode($iv . $hmac . $encryptedText);
     }
 
     private function decrypt(string $token): ?array
@@ -200,14 +200,14 @@ class TokenService
 
         $iv = substr($decoded, 0, 16);
         $hmac = substr($decoded, 16, 32);
-        $cipherText = substr($decoded, 48);
+        $encryptedText = substr($decoded, 48);
 
-        $calculatedHmac = hash_hmac("sha256", $iv . $cipherText, $this->signatureSecret, true);
+        $calculatedHmac = hash_hmac("sha256", $iv . $encryptedText, $this->signatureSecret, true);
         if (!hash_equals($hmac, $calculatedHmac)) {
             return null;
         }
 
-        $json = openssl_decrypt($cipherText, "aes-256-cbc", $this->encryptionSecret, OPENSSL_RAW_DATA, $iv);
+        $json = openssl_decrypt($encryptedText, "aes-256-cbc", $this->encryptionSecret, OPENSSL_RAW_DATA, $iv);
         return json_decode($json, true);
     }
 }
