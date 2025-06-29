@@ -3,6 +3,7 @@
 namespace App\Profile\Controller;
 
 use App\Core\Controller\ApiController;
+use App\Core\Service\ContextService;
 use App\Profile\Dto\ChangePasswordDto;
 use App\Profile\Dto\UpdateProfileDto;
 use App\Profile\UseCase\ChangePasswordUseCase;
@@ -52,18 +53,18 @@ class ProfileController extends ApiController
     }
 
     #[Route("/profile/avatar", name: "profile_upload_avatar", methods: ["POST"])]
-    public function uploadAvatar(Request $request, UploadAvatarUserCase $uploadAvatarUserCase): Response
+    public function uploadAvatar(Request $request, UploadAvatarUserCase $uploadAvatarUserCase, ContextService $contextService): Response
     {
         $uploadAvatarUserCase->execute($request);
 
-        return $this->getHttpOkResponse("The avatar has been successfully uploaded");
+        return $this->getHttpOkResponse($contextService->translate("The avatar has been successfully uploaded"));
     }
 
     #[Route("/profile/avatar", name: "profile_delete_avatar", methods: ["DELETE"])]
-    public function deleteAvatar(DeleteAvatarUserCase $deleteAvatarUserCase): Response
+    public function deleteAvatar(DeleteAvatarUserCase $deleteAvatarUserCase, ContextService $contextService): Response
     {
         $deleteAvatarUserCase->execute();
 
-        return $this->getHttpOkResponse("The avatar has been successfully deleted");
+        return $this->getHttpOkResponse($contextService->translate("The avatar has been successfully deleted"));
     }
 }

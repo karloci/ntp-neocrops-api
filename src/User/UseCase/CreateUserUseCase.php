@@ -6,6 +6,7 @@ use App\Core\Service\ContextService;
 use App\Farm\Entity\Farm;
 use App\User\Dto\UserDto;
 use App\User\Entity\User;
+use App\User\Exception\UniqueUserException;
 use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Exception;
@@ -33,10 +34,9 @@ class CreateUserUseCase
             throw new AccessDeniedHttpException();
         }
 
-        // TODO kad napravim FarmVoter
-        /*if (!$this->contextService->security->isGranted("READ", $farm)) {
+        if (!$this->contextService->security->isGranted("READ", $farm)) {
             throw new AccessDeniedHttpException();
-        }*/
+        }
 
         try {
             $user = new User();
@@ -50,7 +50,7 @@ class CreateUserUseCase
             return $user;
         }
         catch (UniqueConstraintViolationException) {
-            throw new ConflictHttpException();
+            throw new UniqueUserException($this->contextService->translate("User with this email address already exists"));
         }
         catch (Exception $e) {
             throw new BadRequestHttpException($e->getMessage(), $e);

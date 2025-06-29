@@ -5,6 +5,7 @@ namespace App\User\UseCase;
 use App\Core\Service\ContextService;
 use App\User\Dto\UserDto;
 use App\User\Entity\User;
+use App\User\Exception\UniqueUserException;
 use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Exception;
@@ -45,7 +46,7 @@ class UpdateUserUseCase
             $this->userRepository->save($user, true);
         }
         catch (UniqueConstraintViolationException) {
-            throw new ConflictHttpException();
+            throw new UniqueUserException($this->contextService->translate("User with this email address already exists"));
         }
         catch (Exception $e) {
             throw new BadRequestHttpException($e->getMessage(), $e);

@@ -48,7 +48,7 @@ class UpdatePurchaseUseCase
         $currentStock = $this->inventoryRepository->findStockForSupply($purchase->getFarm(), $purchaseDto->getSupply());
 
         if (($purchase->getAmount() - $purchaseDto->getAmount()) > $currentStock) {
-            throw new InvalidConsumptionException("Neće biti dovoljno na lageru!");
+            throw new InvalidConsumptionException($this->contextService->translate("Updating is not possible because there will not be enough stock remaining"));
         }
 
         try {

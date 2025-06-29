@@ -5,6 +5,7 @@ namespace App\Farm\UseCase;
 use App\Core\Service\ContextService;
 use App\Farm\Dto\FarmDto;
 use App\Farm\Exception\InvalidConsumptionException;
+use App\Farm\Exception\UniqueFarmException;
 use App\Profile\Dto\UpdateProfileDto;
 use App\Farm\Entity\Farm;
 use App\Farm\Repository\FarmRepository;
@@ -48,7 +49,7 @@ class UpdateFarmUseCase
             return $farm;
         }
         catch (UniqueConstraintViolationException) {
-            throw new InvalidConsumptionException($this->contextService->translate("Farm with this ID already exists"));
+            throw new UniqueFarmException($this->contextService->translate("Farm with this ID already exists"));
         }
         catch (ORMException $e) {
             throw new RuntimeException($e->getMessage(), 0, $e);

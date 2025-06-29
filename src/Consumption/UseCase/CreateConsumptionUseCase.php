@@ -39,7 +39,7 @@ class CreateConsumptionUseCase
 
         $currentStock = $this->inventoryRepository->findStockForSupply($farm, $consumptionDto->getSupply());
         if ($consumptionDto->getAmount() > $currentStock) {
-            throw new InvalidConsumptionException("Nema dovoljno na lageru!");
+            throw new InvalidConsumptionException("There is not enough stock to save this amount of consumption");
         }
 
         try {

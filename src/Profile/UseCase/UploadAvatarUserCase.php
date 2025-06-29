@@ -31,7 +31,7 @@ class UploadAvatarUserCase
         $imageData = $request->getContent();
 
         if (!$imageData) {
-            throw new BadRequestHttpException("No image data received");
+            throw new BadRequestHttpException($this->contextService->translate("No image data received"));
         }
 
 

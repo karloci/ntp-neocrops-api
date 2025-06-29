@@ -43,7 +43,7 @@ class DeletePurchaseUseCase
 
         $currentStock = $this->inventoryRepository->findStockForSupply($purchase->getFarm(), $purchase->getSupply());
         if ($purchase->getAmount() > $currentStock) {
-            throw new InvalidConsumptionException("Neće biti dovoljno na lageru!");
+            throw new InvalidConsumptionException($this->contextService->translate("Deletion is not possible because there will not be enough stock remaining"));
         }
 
         try {

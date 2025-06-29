@@ -1,0 +1,10 @@
+Invalid credentials: Neispravni podaci za prijavu
+Refresh token is not provided: Token za osvježavanje nije pronađen
+User with this email address already exists: Korisnik s ovom adresom e-pošte već postoji
+There is not enough stock to save this amount of consumption: Nema dovoljno zaliha za unos ove količine potrošnje
+Farm with this ID already exists: Farma s ovim OIB-om već postoji
+The avatar has been successfully uploaded: Profilna slika je uspješno postavljena
+The avatar has been successfully deleted: Profilna slika je uspješno uklonjena
+No image data received: Slika nije pronađena
+Deletion is not possible because there will not be enough stock remaining: Brisanje nije moguće jer neće biti dovoljno stanja na zalihama
+Updating is not possible because there will not be enough stock remaining: Uređivanje nije moguće jer neće biti dovoljno stanja na zalihama
