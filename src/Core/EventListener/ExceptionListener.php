@@ -83,7 +83,7 @@ final class ExceptionListener
             }
 
             $response = new JsonResponse([
-                "message" => $contextService->translate($message)
+                "message" => $this->contextService->translate($message)
             ], $statusCode);
 
             $event->setResponse($response);
