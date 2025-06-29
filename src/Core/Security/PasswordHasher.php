@@ -7,7 +7,7 @@ use Symfony\Component\PasswordHasher\PasswordHasherInterface;
 
 class PasswordHasher implements PasswordHasherInterface
 {
-    private const CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    private const string CHARACTERS = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 
     public function hash(#[SensitiveParameter] string $plainPassword): string
     {
