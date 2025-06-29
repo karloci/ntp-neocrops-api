@@ -2,6 +2,7 @@
 
 namespace App\Core\EventListener;
 
+use App\Core\Service\ContextService;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
@@ -61,7 +62,7 @@ final class ExceptionListener
     }
 
     #[AsEventListener(event: KernelEvents::EXCEPTION)]
-    public function onKernelException(ExceptionEvent $event): void
+    public function onKernelException(ExceptionEvent $event, ContextService $contextService): void
     {
         if ($this->isDebugMode === false) {
             $throwable = $event->getThrowable();
@@ -80,7 +81,7 @@ final class ExceptionListener
             }
 
             $response = new JsonResponse([
-                "message" => $message
+                "message" => $contextService->translate($message)
             ], $statusCode);
 
             $event->setResponse($response);

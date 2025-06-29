@@ -8,3 +8,10 @@ The avatar has been successfully deleted: Profilna slika je uspješno uklonjena
 No image data received: Slika nije pronađena
 Deletion is not possible because there will not be enough stock remaining: Brisanje nije moguće jer neće biti dovoljno stanja na zalihama
 Updating is not possible because there will not be enough stock remaining: Uređivanje nije moguće jer neće biti dovoljno stanja na zalihama
+Bad Request: Pogrešan zahtjev prema poslužitelju
+Unauthorized: Neautorizirano
+Forbidden: Zabranjen pristup
+Not Found: Nije pronađeno
+Conflict: Konflikt
+Unprocessable Content: Nije moguće obraditi sadržaj
+Internal Server Error: Greška poslužitelja
