@@ -55,14 +55,16 @@ final class ExceptionListener
     ];
 
     private bool $isDebugMode;
+    private ContextService $contextService;
 
-    public function __construct(bool $isDebugMode)
+    public function __construct(bool $isDebugMode, ContextService $contextService)
     {
         $this->isDebugMode = $isDebugMode;
+        $this->contextService = $contextService;
     }
 
     #[AsEventListener(event: KernelEvents::EXCEPTION)]
-    public function onKernelException(ExceptionEvent $event, ContextService $contextService): void
+    public function onKernelException(ExceptionEvent $event): void
     {
         if ($this->isDebugMode === false) {
             $throwable = $event->getThrowable();

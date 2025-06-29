@@ -23,6 +23,7 @@ services:
     App\Core\EventListener\ExceptionListener:
         arguments:
             $isDebugMode: '%kernel.debug%'
+            $contextService: 'App\Core\Service\ContextService'
 
     App\Core\Service\TokenService:
         arguments:
