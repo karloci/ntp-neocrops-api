@@ -30,6 +30,7 @@ class UpdateUserUseCase
 
     public function execute(string $userId, UserDto $userDto): User
     {
+        /** @var User $user */
         $user = $this->userRepository->findOneBy(["id" => $userId]);
 
         if (is_null($user)) {
@@ -40,7 +41,7 @@ class UpdateUserUseCase
             throw new AccessDeniedHttpException();
         }
 
-        if ($userId*1 === $user->getId()*1 && !$userDto->getIsAdmin()) {
+        if ($userId*1 === $this->contextService->security->getUser()->getId()*1 && !$userDto->getIsAdmin()) {
             throw new RevokeRoleException($this->contextService->translate("You cannot revoke admin role to yourself"));
         }
 
