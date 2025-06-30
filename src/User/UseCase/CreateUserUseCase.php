@@ -43,6 +43,11 @@ class CreateUserUseCase
             $user->setFullName($userDto->getFullName());
             $user->setEmail($userDto->getEmail());
             $user->setPassword($this->passwordHasher->hashPassword($user, "1234"));
+
+            if ($userDto->getIsAdmin()) {
+                $user->setRoles(["ROLE_ADMIN"]);
+            }
+
             $user->setUserFarm($farm);
 
             $this->userRepository->save($user, true);

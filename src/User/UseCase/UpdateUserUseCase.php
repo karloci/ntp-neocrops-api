@@ -5,6 +5,7 @@ namespace App\User\UseCase;
 use App\Core\Service\ContextService;
 use App\User\Dto\UserDto;
 use App\User\Entity\User;
+use App\User\Exception\RevokeRoleException;
 use App\User\Exception\UniqueUserException;
 use App\User\Repository\UserRepository;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
@@ -39,9 +40,20 @@ class UpdateUserUseCase
             throw new AccessDeniedHttpException();
         }
 
+        if ($userId*1 === $user->getId()*1 && !$userDto->getIsAdmin()) {
+            throw new RevokeRoleException($this->contextService->translate("You cannot revoke admin role to yourself"));
+        }
+
         try {
             $user->setFullName($userDto->getFullName());
             $user->setEmail($userDto->getEmail());
+
+            if ($userDto->getIsAdmin()) {
+                $user->setRoles(["ROLE_ADMIN"]);
+            }
+            else {
+                $user->setRoles([]);
+            }
 
             $this->userRepository->save($user, true);
         }

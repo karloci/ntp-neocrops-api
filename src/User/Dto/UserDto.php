@@ -18,6 +18,9 @@ class UserDto
     #[Assert\Length(max: 180)]
     private string $email;
 
+    #[Assert\NotNull]
+    private bool $isAdmin;
+
     public function getFullName(): ?string
     {
         return $this->fullName;
@@ -36,5 +39,15 @@ class UserDto
     public function setEmail(?string $email): void
     {
         $this->email = $email;
+    }
+
+    public function getIsAdmin(): bool
+    {
+        return $this->isAdmin;
+    }
+
+    public function setIsAdmin(bool $isAdmin): void
+    {
+        $this->isAdmin = $isAdmin;
     }
 }
